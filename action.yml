@@ -1,26 +1,38 @@
-name: 'Setup a Doom Emacs environment'
+name: 'Set up a Doom Emacs environment'
 description: 'Install a specific version of Doom Emacs (and Emacs) for use in your workflow.'
 author: 'Henrik Lissner'
 
 inputs:
   version:
-    description: 'The version, branch, tag, or SHA of Doom core to install, e.g. "v3.0.0", or "master" for a recent development version.'
+    description: 'The version, branch, tag, or SHA of Doom core to install, e.g. "v3.0.0", or "master" for the latest development version.'
+    type: string
     default: ""
   emacs-version:
     description: 'The version of Emacs to install, e.g. "28.1", or "snapshot" for a recent development version.'
+    type: string
     default: "28.1"
   emacsdir:
     description: "TODO"
+    type: string
     default: ".emacs.d"
   doomdir:
     description: "TODO"
+    type: string
     default: ".doom.d"
-  auto-sync:
-    description: "TODO"
+  sync:
+    description: "Whether or not to automatically run 'doom sync'"
+    type: boolean
     default: true
+  sync-options:
+    description: "Options to pass to 'doom sync'"
+    type: string
+    default: "-f cli.el --no-compile"
 
 runs:
   using: 'composite'
+  env:
+    EMACSDIR: ${{ inputs.emacsdir }}
+    DOOMDIR:  ${{ inputs.doomdir }}
   steps:
     - uses: purcell/setup-emacs@master
       if: runner.os != 'Windows'
@@ -33,34 +45,34 @@ runs:
         architecture: 'x64'
     - uses: jcs090218/setup-emacs-windows@master
       if: runner.os == 'Windows'
-      with:
-        version: ${{ matrix.emacs-version }}
+      with.version: ${{ inputs.emacs-version }}
 
-    - uses: actions/checkout@v3.0.2
+    - name: Checkout Doom Emacs
+      uses: actions/checkout@v3.0.2
       with:
         repository: doomemacs/doomemacs
         path: ${{ inputs.emacsdir }}
         ref: ${{ inputs.version }}
 
-    - name: Add bin/doom to PATH
+    - name: Generate DOOMHASH and add bin/doom to PATH
       shell: bash
       run: |
+        # To later identify if this config has changed.
+        echo "DOOMHASH=$(doom profile hash)" >> $GITHUB_ENV
+
+        # Add bin/doom to $PATH with perl because it's more ubiqitous and
+        # consistent across platforms than 'readlink -f'.
         perl -MCwd -le 'print Cwd::abs_path shift' ${{ inputs.emacsdir }} >> $GITHUB_PATH
 
     - name: Cache packages
-      id: cache-packages
       uses: actions/cache@v3
-      env:
-        hash: ${{ hashFiles('**/packages.el', format('{0}/init.el', inputs.doomdir)) }}
       with:
         path: ${{ inputs.emacsdir }}/.local/straight/repos
-        key: build-${{ runner.os }}-${{ inputs.emacs-version }}-${{ env.hash }}
+        key: build-${{ runner.os }}-${{ env.DOOMHASH }}
         restore-keys: |
-          build-${{ runner.os }}-${{ inputs.emacs-version }}-
           build-${{ runner.os }}-
           build-
 
     - name: doom sync
-      if: inputs.auto-sync
-      env.DOOMDIR: ${{ input.doomdir }}
-      run: doom sync
+      if: inputs.sync
+      run: doom ${{ inputs.sync-options }} sync
