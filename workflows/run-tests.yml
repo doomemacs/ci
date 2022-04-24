@@ -20,7 +20,7 @@ jobs:
         emacs_version: [27.1, 27.2, 28.1, snapshot]
     steps:
       - uses: actions/checkout@v3.0.2
-      - uses: doomemacs/ci
+      - uses: doomemacs/ci@main
         with.emacs-version: ${{ matrix.emacs_version }}
       - name: Run tests
         run: .emacs.d/bin/doom -f ${{ inputs.config-file }} ci run-tests ${{ inputs.testdir }}

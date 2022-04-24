@@ -15,7 +15,7 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.9.1
         with.access_token: ${{ github.token }}
 
-      - uses: doomemacs/ci@master
+      - uses: doomemacs/ci@main
 
       - uses: actions/checkout@v3.0.2
         with.fetch-depth: 0

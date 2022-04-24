@@ -4,4 +4,4 @@ on:
     types: [opened]
 jobs:
   add-to-project:
-    uses: doomemacs/ci/workflows/add-to-project.yml
+    uses: doomemacs/ci/workflows/add-to-project.yml@main
