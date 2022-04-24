@@ -58,7 +58,7 @@ runs:
       env:
         hash: ${{ hashFiles('**/packages.el', format('{0}/init.el', inputs.doomdir)) }}
       with:
-        path: ${{ inputs.emacsdir }}
+        path: ${{ inputs.emacsdir }}/.local/straight/repos
         key: build-${{ runner.os }}-${{ inputs.emacs-version }}-${{ env.hash }}
         restore-keys: |
           build-${{ runner.os }}-${{ inputs.emacs-version }}-
