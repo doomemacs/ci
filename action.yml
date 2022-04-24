@@ -42,6 +42,16 @@ runs:
         path: ${{ inputs.emacsdir }}
         ref: ${{ inputs.version }}
 
+    - name: Add bin/doom to PATH
+      if: runner.os == 'Windows'
+      run: |
+        echo "$((Get-Item .).FullName)/${{ inputs.emacsdir }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    - name: Add bin/doom to PATH
+      if: runner.os != 'Windows'
+      run: |
+        perl -MCwd -le 'print Cwd::abs_path shift' ${{ inputs.emacsdir }} >> $GITHUB_PATH
+
     - name: Cache packages
       id: cache-packages
       uses: actions/cache@v3
@@ -58,4 +68,4 @@ runs:
     - name: doom sync
       if: inputs.auto-sync
       env.DOOMDIR: ${{ input.doomdir }}
-      run: ${{ inputs.emacsdir }}/bin/doom sync
+      run: doom sync
