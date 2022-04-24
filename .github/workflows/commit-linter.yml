@@ -1,0 +1,5 @@
+name: Commit linter
+on: [push, pull_request]
+jobs:
+  lint-commits:
+    uses: doomemacs/ci/workflows/commit-linter.yml
