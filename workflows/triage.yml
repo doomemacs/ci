@@ -1,0 +1,30 @@
+name: Preform basic triage for new issues and PRs
+on: [workflow_call]
+jobs:
+  lock:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v5.0.0
+        with:
+          stale-issue-message: >
+            :warning: **This issue was automatically marked stale because it was
+            inactive for 60 days.** If this issue is still valid, please reply
+            to it or it will be closed in 7 days.
+          stale-pr-message: >-
+            :warning: **This pull request was automatically marked stale because
+            it was inactive for 60 days.** If this PR is still valid, please
+            reply to it or it will be closed in 7 days.
+          exempt-issue-labels: 'needs-triage,help wanted'
+          exempt-pr-labels:    'needs-triage,help wanted'
+          stale-issue-label: stale
+          stale-pr-label: stale
+          exempt-all-milestones: true
+          exempt-all-assignees: true
+          exempt-draft-pr: true
+
+      - uses: dessant/lock-threads@v2
+        with:
+          github-token: ${{ github.token }}
+          issue-lock-inactive-days: '90'
+          pr-lock-inactive-days: '90'
