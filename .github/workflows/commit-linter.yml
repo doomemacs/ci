@@ -1,5 +1,23 @@
-name: Commit linter
-on: [push, pull_request]
+name: Lint commits
+on:
+  workflow_call:
+    inputs:
+      config-file:
+        description: "TODO"
+        type: string
+        default: '.github/ci.el'
+
 jobs:
   lint-commits:
-    uses: doomemacs/ci/workflows/commit-linter.yml@main
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: styfle/cancel-workflow-action@0.9.1
+        with.access_token: ${{ github.token }}
+
+      - uses: doomemacs/ci@main
+
+      - uses: actions/checkout@v3.0.2
+        with.fetch-depth: 0
+
+      - run: .emacs.d/bin/doom -f ${{ inputs.config-file }} ci lint-commits ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
