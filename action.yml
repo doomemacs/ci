@@ -62,7 +62,7 @@ runs:
 
         # Add bin/doom to $PATH with perl because it's more ubiqitous and
         # consistent across platforms than 'readlink -f'.
-        perl -MCwd -le 'print Cwd::abs_path shift' ${{ inputs.emacsdir }} >> $GITHUB_PATH
+        perl -MCwd -le 'print Cwd::abs_path shift' ${{ inputs.emacsdir }}/bin >> $GITHUB_PATH
 
     - name: Cache packages
       uses: actions/cache@v3
