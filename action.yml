@@ -68,10 +68,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: ${{ inputs.emacsdir }}/.local/straight/repos
-        key: build-${{ runner.os }}-${{ env.DOOMHASH }}
-        restore-keys: |
-          build-${{ runner.os }}-
-          build-
+        key: build-${{ env.DOOMHASH }}
 
     - name: doom sync
       if: inputs.sync
