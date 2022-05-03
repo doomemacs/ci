@@ -5,7 +5,7 @@ on:
       token:
         description: "TODO"
         type: string
-        default: ''
+        default: ${{ secrets.PROJECTS_TOKEN }}
       project-url:
         description: "TODO"
         type: string
