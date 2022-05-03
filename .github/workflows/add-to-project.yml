@@ -2,6 +2,10 @@ name: Add issues to project
 on:
   workflow_call:
     inputs:
+      token:
+        description: "TODO"
+        type: string
+        default: ''
       project-url:
         description: "TODO"
         type: string
@@ -14,5 +18,5 @@ jobs:
       - uses: actions/add-to-project@main
         with:
           project-url: ${{ inputs.project-url }}
-          github-token: ${{ github.token }}
+          github-token: ${{ inputs.token }}
           labeled: needs-triage

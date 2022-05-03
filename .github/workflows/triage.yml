@@ -1,5 +1,11 @@
 name: Preform basic triage for new issues and PRs
-on: [workflow_call]
+on:
+  workflow_call:
+    inputs:
+      token:
+        description: "TODO"
+        type: string
+        default: ${{ github.token }}
 jobs:
   lock:
     timeout-minutes: 10
@@ -25,6 +31,6 @@ jobs:
 
       - uses: dessant/lock-threads@v2
         with:
-          github-token: ${{ github.token }}
+          github-token: ${{ inputs.token }}
           issue-lock-inactive-days: '90'
           pr-lock-inactive-days: '90'
