@@ -19,9 +19,12 @@ jobs:
       - uses: styfle/cancel-workflow-action@0.9.1
         with.access_token: ${{ inputs.token }}
 
-      - uses: doomemacs/ci@main
+      - name: Set up Doom Emacs CI
+        uses: doomemacs/ci@main
 
-      - uses: actions/checkout@v3.0.2
+      - name: Checkout current project
+        uses: actions/checkout@v3.0.2
         with.fetch-depth: 0
 
-      - run: .emacs.d/bin/doom -f ${{ inputs.config-file }} ci lint-commits ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+      - name: Run commit linter
+        run: doom -f ${{ inputs.config-file }} ci lint-commits ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
