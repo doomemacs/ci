@@ -24,9 +24,9 @@ inputs:
     type: boolean
     default: true
   sync-options:
-    description: "Options to pass to 'doom sync'"
+    description: "Options to pass to initial 'doom sync'"
     type: string
-    default: "-f cli.el --no-compile"
+    default: ""
 
 runs:
   using: 'composite'
@@ -54,21 +54,25 @@ runs:
         path: ${{ inputs.emacsdir }}
         ref: ${{ inputs.version }}
 
-    - name: Generate DOOMHASH and add bin/doom to PATH
+    - name: Add bin/doom to PATH
       shell: bash
       run: |
-        # To later identify if this config has changed.
-        echo "DOOMHASH=$(doom profile hash)" >> $GITHUB_ENV
-
-        # Add bin/doom to $PATH with perl because it's more ubiqitous and
-        # consistent across platforms than 'readlink -f'.
-        perl -MCwd -le 'print Cwd::abs_path shift' ${{ inputs.emacsdir }}/bin >> $GITHUB_PATH
+        perl -MCwd -le 'print Cwd::abs_path shift' ${{ inputs.emacsdir }} >> $GITHUB_PATH
 
     - name: Cache packages
       uses: actions/cache@v3
+      env.hash: |
+        ${{ hashFiles(
+              format('{0}/**/packages.el', inputs.emacsdir),
+              format('{0}/**/packages.el', inputs.doomdir),
+              format('{0}/init.el', inputs.doomdir)) }}
       with:
         path: ${{ inputs.emacsdir }}/.local/straight/repos
-        key: build-${{ env.DOOMHASH }}
+        key: build-${{ runner.os }}-${{ inputs.emacs-version }}-${{ env.hash }}
+        restore-keys: |
+          build-${{ runner.os }}-${{ inputs.emacs-version }}-
+          build-${{ runner.os }}--
+          build---
 
     - name: doom sync
       if: inputs.sync
