@@ -27,4 +27,7 @@ jobs:
         with.fetch-depth: 0
 
       - name: Run commit linter
-        run: doom -f ${{ inputs.config-file }} ci lint-commits ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+        env.ELFILE: ${{ inputs.config-file }}
+        run: |
+          [[ -f "$ELFILE" ]] || ELFILE=
+          doom ${ELFILE:+-l "$ELFILE"} ci lint-commits ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
