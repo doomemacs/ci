@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       token:
-        description: "TODO"
+        description: 'Token for repository access'
         type: string
         default: ${{ github.token }}
 jobs:
@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/stale@v5.0.0
         with:
+          repo-token: ${{ inputs.token }}
           stale-issue-message: >
             :warning: **This issue was automatically marked stale because it was
             inactive for 60 days.** If this issue is still valid, please reply

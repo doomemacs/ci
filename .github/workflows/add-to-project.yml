@@ -1,13 +1,16 @@
 name: Add issues to project
 on:
   workflow_call:
+    secrets:
+      PROJECTS_TOKEN:
+        required: true
     inputs:
       token:
-        description: "TODO"
+        description: 'Personal token for access to Github Projects (Beta)'
         type: string
-        default: ''
+        default: ${{ secrets.PROJECTS_TOKEN }}
       project-url:
-        description: "TODO"
+        description: "URL to the target Projects (Beta) board"
         type: string
         default: https://github.com/orgs/doomemacs/projects/2
 jobs:
