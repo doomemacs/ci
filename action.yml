@@ -6,7 +6,7 @@ inputs:
   version:
     description: 'The version, branch, tag, or SHA of Doom core to install, e.g. "v3.0.0", or "master" for the latest development version.'
     type: string
-    default: ""
+    default: "master"
   emacs-version:
     description: 'The version of Emacs to install, e.g. "28.1", or "snapshot" for a recent development version.'
     type: string
@@ -18,7 +18,7 @@ inputs:
   doomdir:
     description: "TODO"
     type: string
-    default: ".doom.d"
+    default: ".github"
   sync:
     description: "Whether or not to automatically run 'doom sync'"
     type: boolean
