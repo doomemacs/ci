@@ -1,6 +1,9 @@
 name: Add issues to project
 on:
   workflow_call:
+    secrets:
+      PROJECTS_TOKEN:
+        required: true
     inputs:
       token:
         description: 'Personal token for access to Github Projects (Beta)'
