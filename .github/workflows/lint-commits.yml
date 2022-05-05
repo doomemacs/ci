@@ -1,12 +1,11 @@
 name: Lint commits
 on:
   workflow_call:
-    secrets:
+    inputs:
       token:
         description: 'Token for repository access'
-        required: false
+        type: string
         default: ${{ github.token }}
-    inputs:
       config-file:
         description: "TODO"
         type: string
@@ -18,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: styfle/cancel-workflow-action@0.9.1
-        with.access_token: ${{ secrets.token }}
+        with.access_token: ${{ inputs.token }}
 
       - name: Set up Doom Emacs CI
         uses: doomemacs/ci@legacy

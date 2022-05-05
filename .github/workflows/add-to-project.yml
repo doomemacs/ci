@@ -1,12 +1,11 @@
 name: Add issues to project
 on:
   workflow_call:
-    secrets:
-      token:
-        description: 'Token for the repository'
-        required: false
-        default: ${{ secrets.PROJECTS_TOKEN }}
     inputs:
+      token:
+        description: 'Personal token for access to Github Projects (Beta)'
+        type: string
+        default: ${{ secrets.PROJECTS_TOKEN }}
       project-url:
         description: "TODO"
         type: string
@@ -19,5 +18,5 @@ jobs:
       - uses: actions/add-to-project@main
         with:
           project-url: ${{ inputs.project-url }}
-          github-token: ${{ secrets.token }}
+          github-token: ${{ inputs.token }}
           labeled: needs-triage
