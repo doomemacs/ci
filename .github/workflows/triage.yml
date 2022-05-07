@@ -1,11 +1,5 @@
 name: Preform basic triage for new issues and PRs
-on:
-  workflow_call:
-    inputs:
-      token:
-        description: 'Token for repository access'
-        type: string
-        default: ${{ github.token }}
+on: [workflow_call]
 jobs:
   lock:
     timeout-minutes: 10
@@ -13,7 +7,7 @@ jobs:
     steps:
       - uses: actions/stale@v5.0.0
         with:
-          repo-token: ${{ inputs.token }}
+          repo-token: ${{ github.token }}
           stale-issue-message: >
             :warning: **This issue was automatically marked stale because it was
             inactive for 60 days.** If this issue is still valid, please reply
@@ -32,6 +26,6 @@ jobs:
 
       - uses: dessant/lock-threads@v2
         with:
-          github-token: ${{ inputs.token }}
+          github-token: ${{ github.token }}
           issue-lock-inactive-days: '90'
           pr-lock-inactive-days: '90'
